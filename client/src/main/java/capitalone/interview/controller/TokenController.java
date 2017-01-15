@@ -19,7 +19,7 @@ public class TokenController {
 
     @RequestMapping(value="/token", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Token> getToken() {
-        ResponseEntity<Token> token = tokenClient.getToken();
+        ResponseEntity<Token> token = tokenClient.getResponseEntity();
         return token;
     }
 }

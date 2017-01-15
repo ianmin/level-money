@@ -23,12 +23,20 @@ public class TokenControllerTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    public void test() {
+    public void getTokenResponseTest() {
         ResponseEntity<Token> tokenResponse = this.restTemplate.getForEntity("/token", Token.class);
         assertEquals(HttpStatus.OK, tokenResponse.getStatusCode());
         assertNotNull(tokenResponse.getBody());
         assertEquals("no-error", tokenResponse.getBody().getError());
         assertNotNull(tokenResponse.getBody().getUid());
         assertNotNull(tokenResponse.getBody().getToken());
+    }
+
+    @Test
+    public void getTokenObjTest() {
+        Token tokenObj = this.restTemplate.getForObject("/token", Token.class);
+        assertEquals("no-error", tokenObj.getError());
+        assertNotNull(tokenObj.getUid());
+        assertNotNull(tokenObj.getToken());
     }
 }

@@ -1,5 +1,6 @@
 package capitalone.interview.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
  * Created by minchanglong on 1/14/17.
  */
 @Component
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Credential {
 
     private final String email;
@@ -17,10 +19,15 @@ public class Credential {
     @Autowired
     private Args args;
 
+    public Credential() {
+        this.email = null;
+        this.password = null;
+    }
+
     @Autowired
     public Credential(
             @Value("${login.email}") final String email,
-            @Value("${login.password}") String password) {
+            @Value("${login.password}") final String password) {
         this.email = email;
         this.password = password;
     }
@@ -35,5 +42,9 @@ public class Credential {
 
     public Args getArgs() {
         return args;
+    }
+
+    public void setArgs(Args args) {
+        this.args = args;
     }
 }
