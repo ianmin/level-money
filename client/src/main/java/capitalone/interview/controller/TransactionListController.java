@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by minchanglong on 1/15/17.
@@ -29,13 +30,15 @@ public class TransactionListController {
 
     @RequestMapping(value="/spendIncome", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Map<String, SpendIncome>> getMonthlySpendAndIncome() {
-        Map<String, SpendIncome> spendIncomeMap = transactionListClient.getMonthlySpendAndIncome();
+        TreeMap<String, SpendIncome> spendIncomeMap;
+        spendIncomeMap = (TreeMap<String, SpendIncome>) transactionListClient.getMonthlySpendAndIncome();
         return ResponseEntity.ok().body(spendIncomeMap);
     }
 
     @RequestMapping(value="/spendIncome/withoutDonut", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Map<String, SpendIncome>> getMonthlySpendAndIncomeWoDonut() {
-        Map<String, SpendIncome> spendIncomeMap = transactionListClient.getMonthlySpendAndIncomeWoDonut();
+        TreeMap<String, SpendIncome> spendIncomeMap;
+        spendIncomeMap = (TreeMap<String, SpendIncome>) transactionListClient.getMonthlySpendAndIncomeWoDonut();
         return ResponseEntity.ok().body(spendIncomeMap);
     }
 

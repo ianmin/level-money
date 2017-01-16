@@ -243,6 +243,11 @@ public class TransactionManagerTest {
         spendIncomeTwo.setIncomeLong(30220000L);
         expectedSpendIncomeMap.put("2016-12", spendIncomeTwo);
 
+        SpendIncome averageSpendIncome = new SpendIncome();
+        averageSpendIncome.setSpendLong(606800L);
+        averageSpendIncome.setIncomeLong(30110000L);
+        expectedSpendIncomeMap.put("average", averageSpendIncome);
+
         List<Transaction> transactionsWoPending = transactionManager.filterPendingTransactions(transactions);
         Map<String, SpendIncome> actualSpendIncomeMap = transactionManager.getSpendIncomeMap(transactionsWoPending);
 
@@ -264,6 +269,11 @@ public class TransactionManagerTest {
         spendIncomeTwo.setSpendLong(581600L);
         spendIncomeTwo.setIncomeLong(30220000L);
         expectedSpendIncomeMap.put("2016-12", spendIncomeTwo);
+
+        SpendIncome averageSpendIncome = new SpendIncome();
+        averageSpendIncome.setSpendLong(451200L);
+        averageSpendIncome.setIncomeLong(30110000L);
+        expectedSpendIncomeMap.put("average", averageSpendIncome);
 
         List<Transaction> transactionsWoPending = transactionManager.filterPendingTransactions(transactions);
         List<Transaction> transactionsWoDonut = transactionManager.filterDonutTransactions(transactionsWoPending);

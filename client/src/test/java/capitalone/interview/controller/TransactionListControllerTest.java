@@ -45,7 +45,7 @@ public class TransactionListControllerTest {
 
         assertEquals(HttpStatus.OK, spendIncomeMapResponse.getStatusCode());
 
-        Map<String, SpendIncome> spendIncomeMap = spendIncomeMapResponse.getBody();
+        Map spendIncomeMap = spendIncomeMapResponse.getBody();
         assertNotNull(spendIncomeMap);
     }
 
@@ -56,7 +56,7 @@ public class TransactionListControllerTest {
 
         assertEquals(HttpStatus.OK, spendIncomeMapResponse.getStatusCode());
 
-        Map<String, SpendIncome> spendIncomeMap = spendIncomeMapResponse.getBody();
+        Map spendIncomeMap = spendIncomeMapResponse.getBody();
         assertNotNull(spendIncomeMap);
     }
 

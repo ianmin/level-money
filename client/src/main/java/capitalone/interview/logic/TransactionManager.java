@@ -65,6 +65,8 @@ public class TransactionManager {
             }
         });
 
+        addMonthlyAverageSpendAndIncomeIntoMap(spendIncomeMap);
+
         return spendIncomeMap;
     }
 
@@ -89,5 +91,18 @@ public class TransactionManager {
         spendIncomeCombined.setSpendLong(spendIncomeLeft.getSpendLong() + spendIncomeRight.getSpendLong());
         spendIncomeCombined.setIncomeLong(spendIncomeLeft.getIncomeLong() + spendIncomeRight.getIncomeLong());
         return spendIncomeCombined;
+    }
+
+    private void addMonthlyAverageSpendAndIncomeIntoMap(Map<String, SpendIncome> spendIncomeMap) {
+        SpendIncome averageSpendIncome = new SpendIncome();
+
+        long totalMonths = spendIncomeMap.size();
+        long totalSpendLong = spendIncomeMap.values().stream().mapToLong(SpendIncome::getSpendLong).sum();
+        long totalIncomeLong = spendIncomeMap.values().stream().mapToLong(SpendIncome::getIncomeLong).sum();
+
+        averageSpendIncome.setSpendLong(totalSpendLong / totalMonths);
+        averageSpendIncome.setIncomeLong(totalIncomeLong / totalMonths);
+
+        spendIncomeMap.put("average", averageSpendIncome);
     }
 }
