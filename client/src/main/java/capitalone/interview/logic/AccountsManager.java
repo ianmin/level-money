@@ -48,9 +48,19 @@ public class AccountsManager {
         return accountType.equals(Account.AccountType.ASSET);
     }
 
-    public Account.AssetAccountType getAssetAccountType() {
+    public boolean isCreditAccount() throws RuntimeException {
+
         if (!isAccountExist()) {
             throw new RuntimeException("Account Not Exists");
+        }
+
+        Account.AccountType accountType = accountsMap.get(accountIdToCheck).getAccountType();
+        return accountType.equals(Account.AccountType.CREDIT_CARD);
+    }
+
+    public Account.AssetAccountType getAssetAccountType() {
+        if (!isAccountExist()) {
+            throw new RuntimeException("Account Not Exists - " + accountIdToCheck);
         }
 
        return accountsMap.get(accountIdToCheck).getAssetAccountType();

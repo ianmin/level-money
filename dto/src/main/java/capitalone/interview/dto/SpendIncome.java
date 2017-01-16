@@ -1,7 +1,10 @@
 package capitalone.interview.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
-import javafx.util.converter.CurrencyStringConverter;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -9,18 +12,24 @@ import java.util.Locale;
 /**
  * Created by minchanglong on 1/15/17.
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SpendIncome {
 
     private NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
     private static final double RATE = 20000.00;
 
+    @JsonProperty("spent")
     private String spendStr;
 
+    @JsonIgnore
     private long spendLong;
 
+    @JsonProperty("income")
     private String incomeStr;
 
+    @JsonIgnore
     private long incomeLong;
 
     public SpendIncome() {

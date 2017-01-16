@@ -83,7 +83,8 @@ public class TransactionManagerTest {
 
         DateConverter dateConverter = new DateConverter();
 
-        transactionManager = new TransactionManager(dateConverter, accountsManager);
+        transactionManager = new TransactionManager(dateConverter);
+        transactionManager.setAccountsManager(accountsManager);
 
         creditCardTransactionPending = new Transaction(
                 -200000, true, "credit_account", 1115535410000L, "1415535420001",

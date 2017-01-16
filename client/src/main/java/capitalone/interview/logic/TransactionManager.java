@@ -24,11 +24,14 @@ public class TransactionManager {
 
     private final DateConverter dateConverter;
 
-    private final AccountsManager accountsManager;
+    private AccountsManager accountsManager;
 
     @Autowired
-    public TransactionManager(DateConverter dateConverter, AccountsManager accountsManager) {
+    public TransactionManager(DateConverter dateConverter) {
         this.dateConverter = dateConverter;
+    }
+
+    public void setAccountsManager(AccountsManager accountsManager) {
         this.accountsManager = accountsManager;
     }
 
@@ -70,16 +73,11 @@ public class TransactionManager {
 
         accountsManager.setAccountIdToCheck(transaction.getAccountId());
         if (accountsManager.isAssetAccount()
-                && accountsManager.getAssetAccountType().equals(Account.AssetAccountType.CHECKING)
                 && transaction.getAmount() >= 0) {
             spendIncome.setIncomeLong(Math.abs(transaction.getAmount()));
-        } else if(accountsManager.isAssetAccount()
-                && accountsManager.getAssetAccountType().equals(Account.AssetAccountType.CHECKING)
-                && transaction.getAmount() < 0) {
+        } else if(accountsManager.isAssetAccount() && transaction.getAmount() < 0) {
             spendIncome.setSpendLong(Math.abs(transaction.getAmount()));
-        } else if (!accountsManager.isAssetAccount()
-                && accountsManager.getAssetAccountType().equals(Account.AssetAccountType.NOT_AN_ASSET_ACCOUNT)
-                && transaction.getAmount() <= 0) {
+        } else if (accountsManager.isCreditAccount() && transaction.getAmount() <= 0) {
             spendIncome.setSpendLong(Math.abs(transaction.getAmount()));
         }
 

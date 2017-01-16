@@ -1,6 +1,8 @@
 package capitalone.interview.controller;
 
+import capitalone.interview.dto.SpendIncome;
 import capitalone.interview.dto.TransactionList;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -32,6 +36,28 @@ public class TransactionListControllerTest {
 
         TransactionList transactionList = transactionListResponse.getBody();
         assertNotNull(transactionList);
+    }
+
+    @Test
+    public void getSpendAndIncomeMapWoPendingTransactions() {
+        ResponseEntity<Map> spendIncomeMapResponse =
+                this.restTemplate.getForEntity("/transactions/spendIncome",Map.class);
+
+        assertEquals(HttpStatus.OK, spendIncomeMapResponse.getStatusCode());
+
+        Map<String, SpendIncome> spendIncomeMap = spendIncomeMapResponse.getBody();
+        assertNotNull(spendIncomeMap);
+    }
+
+    @Test
+    public void getSpendAndIncomeMapWoDonutTransactions() {
+        ResponseEntity<Map> spendIncomeMapResponse =
+                this.restTemplate.getForEntity("/transactions/spendIncome/withoutDonut",Map.class);
+
+        assertEquals(HttpStatus.OK, spendIncomeMapResponse.getStatusCode());
+
+        Map<String, SpendIncome> spendIncomeMap = spendIncomeMapResponse.getBody();
+        assertNotNull(spendIncomeMap);
     }
 
 }
