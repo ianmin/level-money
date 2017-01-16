@@ -19,11 +19,8 @@ public class AccountsManagerTest {
 
     private AccountsManager accountsManager;
 
-    private AccountList accountList = new AccountList();
-
     @Before
     public void setUp() throws Exception {
-        List<Account> accounts = Lists.newArrayList();
         Account assetAccount = new Account(
                 "asset_account", 42069000, "NYBE (Not Your Bank Either)",
                 true, "Checking Account", 59952400, Account.AccountType.ASSET,
@@ -48,10 +45,12 @@ public class AccountsManagerTest {
                 Account.AssetAccountType.UNKNOWN
         );
 
+        List<Account> accounts = Lists.newArrayList();
         accounts.add(assetAccount);
         accounts.add(notAssetAccount);
         accounts.add(unRecognizedAccount);
 
+        AccountList accountList = new AccountList();
         accountList.setError("no-error");
         accountList.setAccounts(accounts);
         accountsManager = new AccountsManager();

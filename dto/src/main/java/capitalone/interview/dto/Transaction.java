@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by minchanglong on 1/14/17.
@@ -22,7 +23,7 @@ public class Transaction {
     private String accountId;
 
     @JsonProperty("clear-date")
-    private Long clearDate;
+    private long clearDate;
 
     @JsonProperty("transaction-id")
     private String transactionId;
@@ -42,9 +43,10 @@ public class Transaction {
     @JsonProperty("previous-transaction-id")
     private String previousTransactionId;
 
+    @Autowired
     public Transaction() {}
 
-    public Transaction(int amount, boolean isPending, String accountId, Long clearDate, String transactionId,
+    public Transaction(int amount, boolean isPending, String accountId, long clearDate, String transactionId,
                        String rawMerchant, String categorization, String merchant, String transaction_time,
                        String previous_transaction_id) {
         this.amount = amount;
