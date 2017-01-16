@@ -1,12 +1,10 @@
 package capitalone.interview.logic;
 
-import capitalone.interview.client.AccountListClient;
 import capitalone.interview.dto.Account;
 import capitalone.interview.dto.AccountList;
 import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,9 +26,8 @@ public class AccountsManager {
 
     private Map<String, Account> accountsMap = Maps.newHashMap();
 
-    public AccountsManager(AccountList accountList){
+    public void setAccountList(AccountList accountList) {
         this.accountList = accountList;
-        getAccountsMap();
     }
 
     public void setAccountIdToCheck(String accountIdToCheck) {
@@ -59,7 +56,7 @@ public class AccountsManager {
        return accountsMap.get(accountIdToCheck).getAssetAccountType();
     }
 
-    private void getAccountsMap() {
+    public void setAccountsMap() {
         List<Account> accounts = accountList.getAccounts();
 
         accountsMap = accounts.stream().collect(

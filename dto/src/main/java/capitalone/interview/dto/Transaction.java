@@ -59,7 +59,7 @@ public class Transaction {
         this.previousTransactionId = previous_transaction_id;
     }
 
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 

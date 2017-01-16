@@ -8,7 +8,9 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by minchanglong on 1/16/17.
@@ -52,7 +54,9 @@ public class AccountsManagerTest {
 
         accountList.setError("no-error");
         accountList.setAccounts(accounts);
-        accountsManager = new AccountsManager(accountList);
+        accountsManager = new AccountsManager();
+        accountsManager.setAccountList(accountList);
+        accountsManager.setAccountsMap();
     }
 
     @Test
@@ -105,5 +109,4 @@ public class AccountsManagerTest {
         accountsManager.setAccountIdToCheck("unrecognized_account");
         assertEquals(Account.AssetAccountType.UNKNOWN, accountsManager.getAssetAccountType());
     }
-
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,6 +60,11 @@ public class Account {
 
     @JsonProperty("asset-account-type")
     private AssetAccountType assetAccountType;
+
+    @Autowired
+    public Account() {
+
+    }
 
     public Account(String accountId, long institutionId, String institutionName, boolean isActive, String accountName,
                    long balance, AccountType accountType, String lastDigits, String institutionLoginId,
