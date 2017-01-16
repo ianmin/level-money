@@ -1,7 +1,7 @@
 package capitalone.interview.controller;
 
-import capitalone.interview.client.TransactionListClient;
-import capitalone.interview.dto.TransactionList;
+import capitalone.interview.client.AccountListClient;
+import capitalone.interview.dto.AccountList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,14 +14,14 @@ import java.io.IOException;
  * Created by minchanglong on 1/15/17.
  */
 @RestController
-public class TransactionListController {
+public class AccountListController {
 
     @Autowired
-    TransactionListClient transactionListClient;
+    AccountListClient accountListClient;
 
-    @RequestMapping(value="/transactions/all", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<TransactionList> getAllTransactions() throws IOException {
-        return transactionListClient.getResponseEntity();
+    @RequestMapping(value="/accounts", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<AccountList> getAllAccounts() throws IOException {
+        return accountListClient.getResponseEntity();
     }
 
 }

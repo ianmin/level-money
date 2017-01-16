@@ -3,7 +3,6 @@ package capitalone.interview.client;
 import capitalone.interview.dto.Credential;
 import capitalone.interview.dto.Token;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,25 +18,30 @@ import java.util.List;
  * Created by minchanglong on 1/14/17.
  */
 @Component
-public class TokenClient implements ClientInterface{
-    @Autowired
-    private RestOperations restOperations;
+public class TokenClient {
+    private final RestOperations restOperations;
 
     private final String uri;
 
-    @Autowired
-    private Credential credential;
+    private final Credential credential;
 
+    /**
+     * @param url: url to get access token
+     * @param restOperations: restOperations
+     * @param credential: credential o
+     */
     @Autowired
-    TokenClient(@Value("${level.money.url.login}") final String url) {
+    TokenClient(@Value("${level.money.url.login}") final String url, RestOperations restOperations, Credential credential) {
         this.uri = url;
+        this.restOperations = restOperations;
+        this.credential = credential;
     }
 
     public ResponseEntity<Token> getResponseEntity() {
         return restOperations.postForEntity(uri, getRequest(), Token.class);
     }
 
-    public Token getObject() {
+    Token getObject() {
         return restOperations.postForObject(uri, getRequest(), Token.class);
     }
 
