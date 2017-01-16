@@ -13,7 +13,7 @@ import com.google.common.base.MoreObjects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Transaction {
 
-    private int amount;
+    private long amount;
 
     @JsonProperty("is-pending")
     private boolean isPending;

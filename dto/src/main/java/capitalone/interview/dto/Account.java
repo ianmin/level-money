@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +59,39 @@ public class Account {
 
     @JsonProperty("asset-account-type")
     private AssetAccountType assetAccountType;
+
+    public Account(String accountId, long institutionId, String institutionName, boolean isActive, String accountName,
+                   long balance, AccountType accountType, String lastDigits, String institutionLoginId,
+                   boolean isAutoSaveSource, boolean isAutoSaveTarget, boolean canBeAutoSaveFundingSource,
+                   boolean canBeAutoSaveTarget, long autoSaveAccountPriority, AssetAccountType assetAccountType) {
+        this.accountId = accountId;
+        this.institutionId = institutionId;
+        this.institutionName = institutionName;
+        this.isActive = isActive;
+        this.accountName = accountName;
+        this.balance = balance;
+        this.accountType = accountType;
+        this.lastDigits = lastDigits;
+        this.institutionLoginId = institutionLoginId;
+        this.isAutoSaveSource = isAutoSaveSource;
+        this.isAutoSaveTarget = isAutoSaveTarget;
+        this.canBeAutoSaveFundingSource = canBeAutoSaveFundingSource;
+        this.canBeAutoSaveTarget = canBeAutoSaveTarget;
+        this.autoSaveAccountPriority = autoSaveAccountPriority;
+        this.assetAccountType = assetAccountType;
+    }
+
+    public String getAccountId() {
+        return accountId;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public AssetAccountType getAssetAccountType() {
+        return assetAccountType;
+    }
 
     public enum AccountType {
         UNRECOGNIZED,
