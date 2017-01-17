@@ -2,6 +2,7 @@ package capitalone.interview.controller;
 
 import capitalone.interview.client.TransactionListClient;
 import capitalone.interview.dto.SpendIncome;
+import capitalone.interview.dto.Transaction;
 import capitalone.interview.dto.TransactionList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -40,6 +42,20 @@ public class TransactionListController {
         TreeMap<String, SpendIncome> spendIncomeMap;
         spendIncomeMap = (TreeMap<String, SpendIncome>) transactionListClient.getMonthlySpendAndIncomeWoDonut();
         return ResponseEntity.ok().body(spendIncomeMap);
+    }
+
+    @RequestMapping(value="/spendIncome/withoutCreditCardPayment", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Map<String, SpendIncome>> getMonthlySpendAndIncomeWoCreditCardPayment() {
+        TreeMap<String, SpendIncome> spendIncomeMap;
+        spendIncomeMap = (TreeMap<String, SpendIncome>) transactionListClient.getMonthlySpendAndIncomeWoCreditCardPayment();
+        return ResponseEntity.ok().body(spendIncomeMap);
+    }
+
+    @RequestMapping(value="/getCreditCardPayments", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity< List<Transaction>> getCreditCardPayments() {
+        List<Transaction> creditCardPayments;
+        creditCardPayments = transactionListClient.getCreditCardPayments();
+        return ResponseEntity.ok().body(creditCardPayments);
     }
 
 }

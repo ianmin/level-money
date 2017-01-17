@@ -11,21 +11,20 @@ import java.time.OffsetDateTime;
 @Component
 public class DateConverter {
 
-    private String dateTimeStr;
+    private static final Long EPOCH_SECOND_OF_TWENTY_HOURS = 86400L;
 
-    private OffsetDateTime offsetDateTime;
-
-    public void setDateTimeStr(String dateTimeStr) {
-        this.dateTimeStr = dateTimeStr;
-        convertDateTime();
-    }
-
-    private void convertDateTime() {
-        this.offsetDateTime = OffsetDateTime.parse(dateTimeStr);
-    }
-
-    public String getYearAndMonth() {
+    public static String getYearAndMonth(String dateTimeStr) {
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(dateTimeStr);
         DecimalFormat monthFormat= new DecimalFormat("00");
         return offsetDateTime.getYear() + "-" + monthFormat.format(offsetDateTime.getMonth().getValue());
+    }
+
+    public static Long getEpochSecond(String dateTimeStr) {
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(dateTimeStr);
+        return offsetDateTime.toInstant().getEpochSecond();
+    }
+
+    public static boolean isWithinTwentyFourHours(Long epochSecondLeft, Long epochSecondRight) {
+        return Math.abs(epochSecondLeft - epochSecondRight) <= EPOCH_SECOND_OF_TWENTY_HOURS;
     }
 }

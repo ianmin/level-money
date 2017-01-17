@@ -1,15 +1,18 @@
 package capitalone.interview.logic;
 
 import capitalone.interview.client.DateConverter;
-import capitalone.interview.dto.Account;
 import capitalone.interview.dto.SpendIncome;
 import capitalone.interview.dto.Transaction;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -21,15 +24,15 @@ public class TransactionManager {
 
     private static final String DONUT_MERCHANT_ONE = "Krispy Kreme Donuts";
     private static final String DONUT_MERCHANT_TWO = "DUNKIN #336784";
-
-    private final DateConverter dateConverter;
+    private static final String CREDIT_CARD_PAYMENTS_MERCHANT_FOR_ASSET_ACCOUNT = "CC Payment";
+    private static final String CREDIT_CARD_PAYMENTS_MERCHANT_FOR_NON_ASSET_ACCOUNT = "Credit Card Payment";
 
     private AccountsManager accountsManager;
 
+    private List<Transaction> creditCardPaymentsTransactions = Lists.newLinkedList();
+
     @Autowired
-    public TransactionManager(DateConverter dateConverter) {
-        this.dateConverter = dateConverter;
-    }
+    public TransactionManager() {}
 
     public void setAccountsManager(AccountsManager accountsManager) {
         this.accountsManager = accountsManager;
@@ -51,11 +54,31 @@ public class TransactionManager {
         return transactions.stream().parallel().filter(donutTransactionsPredicate).collect(Collectors.toList());
     }
 
+    public List<Transaction> filterCreditCardPayments(List<Transaction> transactions) {
+        List<String> creditCardPaymentTransactionIds = getTransactionIdsOfCreditCardPayments(transactions);
+
+        List<Transaction> transactionsWithoutCreditCardPayments = Lists.newArrayList();
+
+        transactions.forEach(transaction -> {
+            if (creditCardPaymentTransactionIds.contains(transaction.getTransactionId())) {
+                creditCardPaymentsTransactions.add(transaction);
+            } else {
+                transactionsWithoutCreditCardPayments.add(transaction);
+            }
+        });
+
+        return transactionsWithoutCreditCardPayments;
+    }
+
+    public List<Transaction> getCreditCardPaymentsTransactions() {
+        creditCardPaymentsTransactions.sort(Comparator.comparing(Transaction::getTransactionTime));
+        return creditCardPaymentsTransactions;
+    }
+
     public Map<String, SpendIncome> getSpendIncomeMap(List<Transaction> transactionList) {
         Map<String, SpendIncome> spendIncomeMap = Maps.newTreeMap();
         transactionList.forEach(transaction -> {
-            dateConverter.setDateTimeStr(transaction.getTransactionTime());
-            String transactionYearMonth = dateConverter.getYearAndMonth();
+            String transactionYearMonth = DateConverter.getYearAndMonth(transaction.getTransactionTime());
             if (spendIncomeMap.containsKey(transactionYearMonth)) {
                SpendIncome combinedSpendIncome =
                        combineSpendIncome(spendIncomeMap.get(transactionYearMonth), transformTransaction(transaction));
@@ -104,5 +127,48 @@ public class TransactionManager {
         averageSpendIncome.setIncomeLong(totalIncomeLong / totalMonths);
 
         spendIncomeMap.put("average", averageSpendIncome);
+    }
+
+    private List<String> getTransactionIdsOfCreditCardPayments(List<Transaction> transactions) {
+        List<String> creditCardPaymentTransactionIds = Lists.newLinkedList();
+
+        TreeMap<Long, Transaction> postedPaymentsOnChecking = Maps.newTreeMap();
+        TreeMap<Long, Transaction> postedPaymentsOnCreditCard = Maps.newTreeMap();
+
+        transactions.forEach(transaction -> {
+            accountsManager.setAccountIdToCheck(transaction.getAccountId());
+            if (accountsManager.isAssetAccount()
+                    && transaction.getMerchant().equalsIgnoreCase(CREDIT_CARD_PAYMENTS_MERCHANT_FOR_ASSET_ACCOUNT)) {
+                postedPaymentsOnChecking.put(DateConverter.getEpochSecond(transaction.getTransactionTime()), transaction);
+            } else if (accountsManager.isCreditAccount()
+                    && transaction.getMerchant().equalsIgnoreCase(CREDIT_CARD_PAYMENTS_MERCHANT_FOR_NON_ASSET_ACCOUNT)) {
+                postedPaymentsOnCreditCard.put(DateConverter.getEpochSecond(transaction.getTransactionTime()), transaction);
+            }
+        });
+
+        if (postedPaymentsOnChecking.size() != 0 && postedPaymentsOnCreditCard.size() != 0) {
+
+            for (Map.Entry<Long, Transaction> paymentsOnCheckingEntry : postedPaymentsOnChecking.entrySet()) {
+                Long transactionTimeChecking = paymentsOnCheckingEntry.getKey();
+                Transaction transactionChecking = paymentsOnCheckingEntry.getValue();
+
+                Iterator<Map.Entry<Long, Transaction>> iteratorOfPaymentOnCreditCard = postedPaymentsOnCreditCard.entrySet().iterator();
+               while(iteratorOfPaymentOnCreditCard.hasNext()) {
+                    Map.Entry<Long, Transaction> paymentsOnCreditCardEntry = iteratorOfPaymentOnCreditCard.next();
+                    Long transactionTimeCreditCard = paymentsOnCreditCardEntry.getKey();
+                    Transaction transactionCreditCard = paymentsOnCreditCardEntry.getValue();
+
+                    if (transactionChecking.getAmount() + transactionCreditCard.getAmount() == 0
+                            && DateConverter.isWithinTwentyFourHours(transactionTimeChecking, transactionTimeCreditCard)) {
+                        creditCardPaymentTransactionIds.add(transactionChecking.getTransactionId());
+                        creditCardPaymentTransactionIds.add(transactionCreditCard.getTransactionId());
+
+                        iteratorOfPaymentOnCreditCard.remove();
+                    }
+                }
+            }
+        }
+
+        return creditCardPaymentTransactionIds;
     }
 }

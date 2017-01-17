@@ -1,8 +1,6 @@
 package capitalone.interview.controller;
 
-import capitalone.interview.dto.SpendIncome;
 import capitalone.interview.dto.TransactionList;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -52,12 +51,34 @@ public class TransactionListControllerTest {
     @Test
     public void getSpendAndIncomeMapWoDonutTransactions() {
         ResponseEntity<Map> spendIncomeMapResponse =
-                this.restTemplate.getForEntity("/transactions/spendIncome/withoutDonut",Map.class);
+                this.restTemplate.getForEntity("/transactions/spendIncome/withoutDonut", Map.class);
 
         assertEquals(HttpStatus.OK, spendIncomeMapResponse.getStatusCode());
 
         Map spendIncomeMap = spendIncomeMapResponse.getBody();
         assertNotNull(spendIncomeMap);
+    }
+
+    @Test
+    public void getSpendAndIncomeMapWoCreditCardPayments() {
+        ResponseEntity<Map> spendIncomeMapResponse =
+                this.restTemplate.getForEntity("/transactions/spendIncome/withoutCreditCardPayment", Map.class);
+
+        assertEquals(HttpStatus.OK, spendIncomeMapResponse.getStatusCode());
+
+        Map spendIncomeMap = spendIncomeMapResponse.getBody();
+        assertNotNull(spendIncomeMap);
+    }
+
+    @Test
+    public void getCreditCardPayments() {
+        ResponseEntity<List> creditCardPaymentsResponse =
+                this.restTemplate.getForEntity("/transactions/getCreditCardPayments", List.class);
+
+        assertEquals(HttpStatus.OK, creditCardPaymentsResponse.getStatusCode());
+
+        List creditCardPayments = creditCardPaymentsResponse.getBody();
+        assertNotNull(creditCardPayments);
     }
 
 }

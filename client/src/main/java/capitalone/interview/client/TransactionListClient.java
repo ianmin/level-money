@@ -1,6 +1,5 @@
 package capitalone.interview.client;
 
-import capitalone.interview.dto.AccountList;
 import capitalone.interview.dto.SpendIncome;
 import capitalone.interview.dto.Transaction;
 import capitalone.interview.dto.TransactionList;
@@ -50,14 +49,19 @@ public class TransactionListClient extends Client{
     }
 
     public Map<String, SpendIncome> getMonthlySpendAndIncome() {
-        return getMonthlySpendAndIncome(false);
+
+        return getMonthlySpendAndIncome(false, false);
     }
 
     public Map<String, SpendIncome> getMonthlySpendAndIncomeWoDonut() {
-        return getMonthlySpendAndIncome(true);
+        return getMonthlySpendAndIncome(true, false);
     }
 
-    private Map<String, SpendIncome> getMonthlySpendAndIncome(boolean filterDonut) {
+    public Map<String, SpendIncome> getMonthlySpendAndIncomeWoCreditCardPayment() {
+        return getMonthlySpendAndIncome(false, true);
+    }
+
+    private Map<String, SpendIncome> getMonthlySpendAndIncome(boolean filterDonut, boolean filterCreditCardPayment) {
         accountsManager.setAccountList(accountListClient.getObject());
         accountsManager.setAccountsMap();
         transactionManager.setAccountsManager(accountsManager);
@@ -71,7 +75,24 @@ public class TransactionListClient extends Client{
             return transactionManager.getSpendIncomeMap(transactionsWoDonut);
         }
 
+        if (filterCreditCardPayment) {
+            List<Transaction> transactionsWoCreditCardPayments = transactionManager.filterCreditCardPayments(transactionsWoPending);
+            return transactionManager.getSpendIncomeMap(transactionsWoCreditCardPayments);
+        }
+
         return transactionManager.getSpendIncomeMap(transactionsWoPending);
+    }
+
+    public List<Transaction> getCreditCardPayments() {
+        accountsManager.setAccountList(accountListClient.getObject());
+        accountsManager.setAccountsMap();
+        transactionManager.setAccountsManager(accountsManager);
+
+        TransactionList transactionList = getObject();
+        List<Transaction> transactions = transactionList.getTransactionList();
+        List<Transaction> transactionsWoPending = transactionManager.filterPendingTransactions(transactions);
+        transactionManager.filterCreditCardPayments(transactionsWoPending);
+        return transactionManager.getCreditCardPaymentsTransactions();
     }
 
 }
