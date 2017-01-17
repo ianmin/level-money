@@ -1,7 +1,7 @@
 package capitalone.interview.controller;
 
-import capitalone.interview.dto.Token;
 import capitalone.interview.client.TokenClient;
+import capitalone.interview.dto.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;

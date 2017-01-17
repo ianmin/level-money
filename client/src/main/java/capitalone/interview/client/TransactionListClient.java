@@ -30,9 +30,11 @@ public class TransactionListClient extends Client{
 
     private final AccountsManager accountsManager;
 
+
     @Autowired
     TransactionListClient(@Value("${level.money.url.getAllTransactions}") final String url,
-                          RestOperations restOperations, TransactionManager transactionManager, AccountsManager accountsManager, AccountListClient accountListClient) {
+                          RestOperations restOperations, TransactionManager transactionManager,
+                          AccountsManager accountsManager, AccountListClient accountListClient) {
         this.url = url;
         this.restOperations = restOperations;
         this.transactionManager = transactionManager;
@@ -49,7 +51,6 @@ public class TransactionListClient extends Client{
     }
 
     public Map<String, SpendIncome> getMonthlySpendAndIncome() {
-
         return getMonthlySpendAndIncome(false, false);
     }
 
@@ -94,5 +95,8 @@ public class TransactionListClient extends Client{
         transactionManager.filterCreditCardPayments(transactionsWoPending);
         return transactionManager.getCreditCardPaymentsTransactions();
     }
+
+
+
 
 }

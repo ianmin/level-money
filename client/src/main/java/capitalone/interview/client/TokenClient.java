@@ -41,7 +41,7 @@ public class TokenClient {
         return restOperations.postForEntity(uri, getRequest(), Token.class);
     }
 
-    Token getObject() {
+    public Token getObject() {
         return restOperations.postForObject(uri, getRequest(), Token.class);
     }
 

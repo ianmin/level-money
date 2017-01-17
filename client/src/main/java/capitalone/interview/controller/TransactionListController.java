@@ -23,7 +23,7 @@ import java.util.TreeMap;
 public class TransactionListController {
 
     @Autowired
-    TransactionListClient transactionListClient;
+    private TransactionListClient transactionListClient;
 
     @RequestMapping(value="/all", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<TransactionList> getAllTransactions() throws IOException {
@@ -57,5 +57,4 @@ public class TransactionListController {
         creditCardPayments = transactionListClient.getCreditCardPayments();
         return ResponseEntity.ok().body(creditCardPayments);
     }
-
 }

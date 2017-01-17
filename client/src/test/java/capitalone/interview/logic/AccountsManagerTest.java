@@ -59,7 +59,7 @@ public class AccountsManagerTest {
     }
 
     @Test
-    public void isAccountExist() throws Exception {
+    public void isAccountExistTest() throws Exception {
         accountsManager.setAccountIdToCheck("not exist account");
         assertFalse(accountsManager.isAccountExist());
 
@@ -74,13 +74,13 @@ public class AccountsManagerTest {
     }
 
     @Test(expected=RuntimeException.class)
-    public void getAccountTypeForNonExistAccount() throws Exception {
+    public void getAccountTypeForNonExistAccountTest() throws Exception {
         accountsManager.setAccountIdToCheck("not exist account");
         accountsManager.isAssetAccount();
     }
 
     @Test
-    public void getAccountTypeForExistAccount() {
+    public void getAccountTypeForExistAccountTest() {
         accountsManager.setAccountIdToCheck("asset_account");
         assertTrue(accountsManager.isAssetAccount());
 
@@ -92,13 +92,13 @@ public class AccountsManagerTest {
     }
 
     @Test(expected=RuntimeException.class)
-    public void getAssetAccountTypeForNonExistAccount() throws Exception {
+    public void getAssetAccountTypeForNonExistAccountTest() throws Exception {
         accountsManager.setAccountIdToCheck("not exist account");
         accountsManager.getAssetAccountType();
     }
 
     @Test
-    public void getAssetAccountTypeForExistAccount() throws Exception {
+    public void getAssetAccountTypeForExistAccountTest() throws Exception {
         accountsManager.setAccountIdToCheck("asset_account");
         assertEquals(Account.AssetAccountType.CHECKING, accountsManager.getAssetAccountType());
 

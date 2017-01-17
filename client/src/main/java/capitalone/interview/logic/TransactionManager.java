@@ -45,6 +45,12 @@ public class TransactionManager {
         return transactions.stream().parallel().filter(pendingTransactionsPredicate).collect(Collectors.toList());
     }
 
+    public List<Transaction> filterNonPendingTransactions(List<Transaction> transactions) {
+        Predicate<Transaction> nonPendingTransactionsPredicate = Transaction::isPending;
+
+        return transactions.stream().parallel().filter(nonPendingTransactionsPredicate).collect(Collectors.toList());
+    }
+
     public List<Transaction> filterDonutTransactions(List<Transaction> transactions) {
         Predicate<Transaction> donutTransactionsPredicate =
                 transaction ->
@@ -76,6 +82,14 @@ public class TransactionManager {
     }
 
     public Map<String, SpendIncome> getSpendIncomeMap(List<Transaction> transactionList) {
+        return getSpendIncomeMap(transactionList, true);
+    }
+
+    public Map<String, SpendIncome> getSpendIncomeMapWoAverage(List<Transaction> transactionList) {
+        return getSpendIncomeMap(transactionList, false);
+    }
+
+    public Map<String, SpendIncome> getSpendIncomeMap(List<Transaction> transactionList, boolean isCaculateAverage) {
         Map<String, SpendIncome> spendIncomeMap = Maps.newTreeMap();
         transactionList.forEach(transaction -> {
             String transactionYearMonth = DateConverter.getYearAndMonth(transaction.getTransactionTime());
@@ -88,7 +102,9 @@ public class TransactionManager {
             }
         });
 
-        addMonthlyAverageSpendAndIncomeIntoMap(spendIncomeMap);
+        if (isCaculateAverage) {
+            addMonthlyAverageSpendAndIncomeIntoMap(spendIncomeMap);
+        }
 
         return spendIncomeMap;
     }
@@ -109,14 +125,23 @@ public class TransactionManager {
         return spendIncome;
     }
 
-    private SpendIncome combineSpendIncome(SpendIncome spendIncomeLeft, SpendIncome spendIncomeRight) {
+    public SpendIncome combineSpendIncome(SpendIncome spendIncomeLeft, SpendIncome spendIncomeRight) {
+
+        if (spendIncomeLeft == null) {
+            spendIncomeLeft = new SpendIncome();
+        }
+
+        if (spendIncomeRight == null) {
+            spendIncomeRight = new SpendIncome();
+        }
+
         SpendIncome spendIncomeCombined = new SpendIncome();
         spendIncomeCombined.setSpendLong(spendIncomeLeft.getSpendLong() + spendIncomeRight.getSpendLong());
         spendIncomeCombined.setIncomeLong(spendIncomeLeft.getIncomeLong() + spendIncomeRight.getIncomeLong());
         return spendIncomeCombined;
     }
 
-    private void addMonthlyAverageSpendAndIncomeIntoMap(Map<String, SpendIncome> spendIncomeMap) {
+    public void addMonthlyAverageSpendAndIncomeIntoMap(Map<String, SpendIncome> spendIncomeMap) {
         SpendIncome averageSpendIncome = new SpendIncome();
 
         long totalMonths = spendIncomeMap.size();

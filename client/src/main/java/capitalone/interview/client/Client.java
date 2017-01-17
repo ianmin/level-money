@@ -44,20 +44,28 @@ abstract class Client {
         this.tokenClient = tokenClient;
     }
 
-    HttpEntity<Credential> getRequest() {
+    public Args getTokenArgs() {
+        Token accessToken = tokenClient.getObject();
+        args.setUid(accessToken.getUid());
+        args.setToken(accessToken.getToken());
+        return args;
+    }
 
+    HttpEntity<Credential> getRequest() {
+        HttpHeaders headers = getHeader();
+        getTokenArgs();
+        this.credential.setArgs(args);
+        return new HttpEntity<>(credential, headers);
+    }
+
+    HttpHeaders getHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         List<MediaType> acceptList = new LinkedList<>();
         acceptList.add(MediaType.APPLICATION_JSON);
         headers.setAccept(acceptList);
-
-        Token accessToken = tokenClient.getObject();
-        args.setUid(accessToken.getUid());
-        args.setToken(accessToken.getToken());
-        credential.setArgs(args);
-
-        return new HttpEntity<>(credential, headers);
+        return headers;
     }
+
 
 }

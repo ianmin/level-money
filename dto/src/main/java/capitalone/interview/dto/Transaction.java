@@ -43,6 +43,12 @@ public class Transaction {
     @JsonProperty("previous-transaction-id")
     private String previousTransactionId;
 
+    @JsonProperty("payee-name-only-for-testing")
+    private String payeeNameOnlyForTesting;
+
+    @JsonProperty("memo-only-for-testing")
+    private String memoOnlyForTesting;
+
     @Autowired
     public Transaction() {}
 
@@ -99,6 +105,14 @@ public class Transaction {
 
     public String getPreviousTransactionId() {
         return previousTransactionId;
+    }
+
+    public String getPayeeNameOnlyForTesting() {
+        return payeeNameOnlyForTesting;
+    }
+
+    public String getMemoOnlyForTesting() {
+        return memoOnlyForTesting;
     }
 
     @Override

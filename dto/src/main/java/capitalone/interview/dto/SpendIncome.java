@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 import java.text.NumberFormat;
@@ -35,6 +36,8 @@ public class SpendIncome {
     public SpendIncome() {
         this.spendLong = 0;
         this.incomeLong = 0;
+        this.spendStr = numberFormat.format(spendLong);
+        this.incomeStr = numberFormat.format(incomeLong);
     }
 
     public void setSpendLong(long spendLong) {
@@ -79,10 +82,9 @@ public class SpendIncome {
     }
 
     @Override
-    public String toString() {
-        return "SpendIncome{" +
-                "spendStr='" + spendStr + '\'' +
-                ", incomeStr='" + incomeStr + '\'' +
-                '}';
+    public final String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("spend", getSpendStr())
+                .add("income", getIncomeStr()).toString();
     }
 }

@@ -227,6 +227,17 @@ public class TransactionManagerTest {
     }
 
     @Test
+    public void filterNonPendingTransactionsTest() {
+        List<Transaction> expectedTransactionsForFilterNonPending = Lists.newArrayList();
+        expectedTransactionsForFilterNonPending.add(creditCardTransactionPending);
+        expectedTransactionsForFilterNonPending.add(checkingTransactionPending);
+
+        List<Transaction> actualTransactionsForFilterNonPending = transactionManager.filterNonPendingTransactions(transactions);
+        assertEquals(expectedTransactionsForFilterNonPending, actualTransactionsForFilterNonPending);
+        assertEquals(expectedTransactionsForFilterNonPending.size(), actualTransactionsForFilterNonPending.size());
+    }
+
+    @Test
     public void getSpendIncomeMapWithFilterPendingTransactionsTest() {
         Map<String, SpendIncome> expectedSpendIncomeMap = Maps.newHashMap();
 
@@ -339,5 +350,60 @@ public class TransactionManagerTest {
         assertNotNull(actualSpendIncomeMap);
         assertEquals(expectedSpendIncomeMap, actualSpendIncomeMap);
         assertEquals(expectedSpendIncomeMap.size(), actualSpendIncomeMap.size());
+    }
+
+    @Test
+    public void combineSpendIncomeTest() {
+        SpendIncome spendIncomeLeft = new SpendIncome();
+        spendIncomeLeft.setSpendLong(100000L);
+        spendIncomeLeft.setIncomeLong(150000L);
+
+        SpendIncome spendIncomeRight = new SpendIncome();
+        spendIncomeRight.setSpendLong(0L);
+        spendIncomeRight.setIncomeLong(150000L);
+
+        SpendIncome expectedCombinedSpendAndIncome = new SpendIncome();
+        expectedCombinedSpendAndIncome.setSpendLong(100000L);
+        expectedCombinedSpendAndIncome.setIncomeLong(300000L);
+
+        SpendIncome actualCombinedSpendAndIncome = transactionManager.combineSpendIncome(spendIncomeLeft, spendIncomeRight);
+        assertEquals(expectedCombinedSpendAndIncome, actualCombinedSpendAndIncome);
+    }
+
+    @Test
+    public void combineNullSpendIncomeTest() {
+        SpendIncome spendIncomeLeft = null;
+        SpendIncome spendIncomeRight = null;
+        SpendIncome expectedCombinedSpendAndIncome = new SpendIncome();
+
+        SpendIncome actualCombinedSpendAndIncome = transactionManager.combineSpendIncome(spendIncomeLeft, spendIncomeRight);
+        assertEquals(expectedCombinedSpendAndIncome, actualCombinedSpendAndIncome);
+    }
+
+    @Test
+    public void addMonthlyAverageSpendAndIncomeIntoMapTest() {
+        Map<String, SpendIncome> spendIncomeMap = Maps.newHashMap();
+
+        SpendIncome spendIncomeOne = new SpendIncome();
+        spendIncomeOne.setSpendLong(100000L);
+        spendIncomeOne.setIncomeLong(150000L);
+        spendIncomeMap.put("2017-01", spendIncomeOne);
+
+        SpendIncome spendIncomeTwo = new SpendIncome();
+        spendIncomeTwo.setSpendLong(200000L);
+        spendIncomeTwo.setIncomeLong(180000L);
+        spendIncomeMap.put("2016-012", spendIncomeTwo);
+
+        transactionManager.addMonthlyAverageSpendAndIncomeIntoMap(spendIncomeMap);
+
+        Map<String, SpendIncome> expectedSpendIncomeMap = Maps.newHashMap();
+        SpendIncome spendIncomeAverage = new SpendIncome();
+        spendIncomeAverage.setSpendLong(150000L);
+        spendIncomeAverage.setIncomeLong(165000L);
+        expectedSpendIncomeMap.put("2017-01", spendIncomeOne);
+        expectedSpendIncomeMap.put("2016-012", spendIncomeTwo);
+        expectedSpendIncomeMap.put("average", spendIncomeAverage);
+
+        assertEquals(expectedSpendIncomeMap, spendIncomeMap);
     }
 }
