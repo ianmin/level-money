@@ -1,5 +1,4 @@
 target/
-!.mvn/wrapper/maven-wrapper.jar
 built
 *.class
 dump.rdb
@@ -32,6 +31,5 @@ nbdist/
 .nb-gradle/
 
 # Package Files #
-*.jar
 *.war
 *.ear
