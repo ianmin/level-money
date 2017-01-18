@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 @Component
 public class AccountsManager {
 
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(AccountsManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountsManager.class);
 
     private AccountList accountList;
 

@@ -25,4 +25,11 @@ public class AccountList extends Error{
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
+
+    @Override
+    public String toString() {
+        return "AccountList{" +
+                "accounts=" + accounts +
+                '}';
+    }
 }

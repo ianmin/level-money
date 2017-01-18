@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,7 +25,7 @@ public class TransactionListController {
     private TransactionListClient transactionListClient;
 
     @RequestMapping(value="/all", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<TransactionList> getAllTransactions() throws IOException {
+    public ResponseEntity<TransactionList> getAllTransactions() {
         return transactionListClient.getResponseEntity();
     }
 

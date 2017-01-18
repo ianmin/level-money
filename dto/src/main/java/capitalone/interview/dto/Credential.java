@@ -47,4 +47,13 @@ public class Credential {
     public void setArgs(Args args) {
         this.args = args;
     }
+
+    @Override
+    public String toString() {
+        return "Credential{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", args=" + args +
+                '}';
+    }
 }

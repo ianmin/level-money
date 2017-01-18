@@ -4,7 +4,9 @@ The project is built using Spring Boot. It implements all features as mentioned.
 
 Installation and Getting Started
 ----------------
-The project is built using Maven wrapper and make sure you have JDK 1.8 installed.
+The project is built using Maven wrapper and make sure you have JDK 1.8 installed. 
+
+If you want to use different user, you could specify user information in level-money/client/src/main/resources/application.properties.
 
 Clone the github repository:
 

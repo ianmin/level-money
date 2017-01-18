@@ -99,6 +99,27 @@ public class Account {
         return assetAccountType;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountId='" + accountId + '\'' +
+                ", institutionId=" + institutionId +
+                ", institutionName='" + institutionName + '\'' +
+                ", isActive=" + isActive +
+                ", accountName='" + accountName + '\'' +
+                ", balance=" + balance +
+                ", accountType=" + accountType +
+                ", lastDigits='" + lastDigits + '\'' +
+                ", institutionLoginId='" + institutionLoginId + '\'' +
+                ", isAutoSaveSource=" + isAutoSaveSource +
+                ", isAutoSaveTarget=" + isAutoSaveTarget +
+                ", canBeAutoSaveFundingSource=" + canBeAutoSaveFundingSource +
+                ", canBeAutoSaveTarget=" + canBeAutoSaveTarget +
+                ", autoSaveAccountPriority=" + autoSaveAccountPriority +
+                ", assetAccountType=" + assetAccountType +
+                '}';
+    }
+
     public enum AccountType {
         UNRECOGNIZED,
         ASSET,

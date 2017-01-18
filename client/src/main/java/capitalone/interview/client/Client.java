@@ -24,9 +24,9 @@ abstract class Client {
 
     private TokenClient tokenClient;
 
-    abstract ResponseEntity getResponseEntity();
+    public abstract ResponseEntity getResponseEntity();
 
-    abstract Object getObject();
+    public abstract Object getObject();
 
     @Autowired
     @Qualifier("requestApi")
@@ -44,7 +44,7 @@ abstract class Client {
         this.tokenClient = tokenClient;
     }
 
-    public Args getTokenArgs() {
+    Args getTokenArgs() {
         Token accessToken = tokenClient.getObject();
         args.setUid(accessToken.getUid());
         args.setToken(accessToken.getToken());
@@ -66,6 +66,4 @@ abstract class Client {
         headers.setAccept(acceptList);
         return headers;
     }
-
-
 }

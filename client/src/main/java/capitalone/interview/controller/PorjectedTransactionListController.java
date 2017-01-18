@@ -23,7 +23,6 @@ public class PorjectedTransactionListController {
     @Autowired
     private ProjectedTransactionListClient projectedTransactionListClient;
 
-
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<TransactionList> getProjectedTransactions(@RequestParam("year") long year, @RequestParam("month") long month) {
         projectedTransactionListClient.setYear(year);

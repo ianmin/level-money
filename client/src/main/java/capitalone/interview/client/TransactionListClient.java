@@ -5,6 +5,8 @@ import capitalone.interview.dto.Transaction;
 import capitalone.interview.dto.TransactionList;
 import capitalone.interview.logic.AccountsManager;
 import capitalone.interview.logic.TransactionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ import java.util.Map;
  */
 @Component
 public class TransactionListClient extends Client{
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionListClient.class);
 
     private final RestOperations restOperations;
 
@@ -71,6 +75,8 @@ public class TransactionListClient extends Client{
         List<Transaction> transactions = transactionList.getTransactionList();
         List<Transaction> transactionsWoPending = transactionManager.filterPendingTransactions(transactions);
 
+        LOGGER.info("Retrieved all transaction list size is {}", transactions.size());
+
         if (filterDonut) {
             List<Transaction> transactionsWoDonut = transactionManager.filterDonutTransactions(transactionsWoPending);
             return transactionManager.getSpendIncomeMap(transactionsWoDonut);
@@ -92,6 +98,9 @@ public class TransactionListClient extends Client{
         TransactionList transactionList = getObject();
         List<Transaction> transactions = transactionList.getTransactionList();
         List<Transaction> transactionsWoPending = transactionManager.filterPendingTransactions(transactions);
+
+        LOGGER.info("Retrieved all transaction list size is {}", transactions.size());
+
         transactionManager.filterCreditCardPayments(transactionsWoPending);
         return transactionManager.getCreditCardPaymentsTransactions();
     }

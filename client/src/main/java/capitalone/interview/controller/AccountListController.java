@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-
 /**
  * Created by minchanglong on 1/15/17.
  */
@@ -20,7 +18,7 @@ public class AccountListController {
     AccountListClient accountListClient;
 
     @RequestMapping(value="/accounts", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<AccountList> getAllAccounts() throws IOException {
+    public ResponseEntity<AccountList> getAllAccounts() {
         return accountListClient.getResponseEntity();
     }
 

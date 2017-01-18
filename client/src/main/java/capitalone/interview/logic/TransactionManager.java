@@ -5,6 +5,8 @@ import capitalone.interview.dto.SpendIncome;
 import capitalone.interview.dto.Transaction;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
  */
 @Component
 public class TransactionManager {
+
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(TransactionManager.class);
 
     private static final String DONUT_MERCHANT_ONE = "Krispy Kreme Donuts";
     private static final String DONUT_MERCHANT_TWO = "DUNKIN #336784";

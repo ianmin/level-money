@@ -6,6 +6,8 @@ import capitalone.interview.dto.Transaction;
 import capitalone.interview.dto.TransactionList;
 import capitalone.interview.logic.AccountsManager;
 import capitalone.interview.logic.TransactionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -24,6 +26,9 @@ import java.util.Map;
  */
 @Component
 public class ProjectedTransactionListClient extends Client {
+
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ProjectedTransactionListClient.class);
 
     private final RestOperations restOperations;
 
@@ -82,6 +87,7 @@ public class ProjectedTransactionListClient extends Client {
         requestBodyOfProjectedTransactionsForMonth.setYear(year);
         requestBodyOfProjectedTransactionsForMonth.setMonth(month);
         requestBodyOfProjectedTransactionsForMonth.setArgs(super.getTokenArgs());
+        LOGGER.info("Request Body when POST to the endpoint GetProjectedTransactionsForMonth is {}" + requestBodyOfProjectedTransactionsForMonth);
     }
 
     public Map<String, SpendIncome> getPredictSpendAndIncomeForCurrentMonth() {
@@ -90,7 +96,6 @@ public class ProjectedTransactionListClient extends Client {
         String currentMonth = yearMonth.toString();
         Map<String, SpendIncome> spendIncomeMapFromAllTransactions = transactionListClient.getMonthlySpendAndIncome();
         Map<String, SpendIncome> spendIncomeMapFromProjectedTransactions = getProjectedSpendAndIncome();
-
         spendIncomeMapFromAllTransactions.put(currentMonth,
                 transactionManager.combineSpendIncome(
                         spendIncomeMapFromAllTransactions.get(currentMonth),
@@ -107,6 +112,8 @@ public class ProjectedTransactionListClient extends Client {
 
         TransactionList transactionList = getObject();
         List<Transaction> transactions = transactionList.getTransactionList();
+
+        LOGGER.info("The size of projected transactions retrieved for {} is {}", year + "-" + month, transactions.size());
         List<Transaction> transactionsWithPending = transactionManager.filterNonPendingTransactions(transactions);
 
         return transactionManager.getSpendIncomeMapWoAverage(transactionsWithPending);
